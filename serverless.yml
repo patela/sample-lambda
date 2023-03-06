@@ -1,0 +1,59 @@
+service: sample-app
+frameworkVersion: '3'
+
+package:
+  individually: true
+
+plugins:
+  # Deploy stack to locally running localstack instance for local development
+  - serverless-localstack
+
+# Keep environment specific configurations in separate files
+custom:
+  # Localstack configuration follows (see https://www.serverless.com/plugins/serverless-localstack)
+  localstack:
+    debug: false
+    stages:
+      - local
+    autostart: false  # Start LocalStack in Docker on Serverless deploy
+    lambda:
+      # Enable this flag to improve performance (may not work on Windows)
+      mountCode: False
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  deploymentMethod: direct
+  region: us-east-1
+
+functions:
+  sampleLambda:
+    handler: com.sample.SampleLambda::handleRequest
+    runtime: java11
+    name: sampleLambda
+    memorySize: 512
+    timeout: 30
+    package:
+      artifact: target/sample-lambda-1.0.0.jar
+    events:
+      - http:
+          path: /hello
+          method: GET
+    environment:
+    tags:
+
+resources:
+  Resources:
+    SampleTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: healthKey
+            AttributeType: S
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: healthKey
+            KeyType: HASH
+        TableName: sample
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true

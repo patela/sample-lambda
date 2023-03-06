@@ -1,0 +1,44 @@
+*.class
+*.jar
+*.log
+logfile
+
+# Node.js files
+package-lock.json
+node_modules
+authlambda.zip
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+dependency-reduced-pom.xml
+log/
+target/
+
+# AWS SAM
+.aws-sam
+aws-sam/
+
+# Jackson?
+.factorypath
+
+# Visual Studio Code
+.vscode
+
+# Terraform files
+.terraform
+*.backup
+
+# Serverless files
+.serverless
